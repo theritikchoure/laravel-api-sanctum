@@ -22,7 +22,7 @@ use App\Http\Controllers\UserController;
 // });
 
 
-// ************** Public Api Routes (Start) ************************* //
+// ************** Fully Public Api Routes (Start) ************************* //
 
     // Route::get('/students', [StudentController::class, 'index']);
     // Route::get('/students/{id}', [StudentController::class, 'show']);
@@ -31,16 +31,50 @@ use App\Http\Controllers\UserController;
     // Route::delete('/students/{id}', [StudentController::class, 'destroy']);
     // Route::get('/students/search/{city}', [StudentController::class, 'search']);
 
-// ************** Public Api Routes (End) ************************* //
+// ************** Fully Public Api Routes (End) ************************* //
 
-Route::post('/register', [UserController::class, 'register']);
+// ************** Api Token Routes (Start) ****************************//
+
+    Route::post('/register', [UserController::class, 'register']);
+    Route::post('/login', [UserController::class, 'login']);
+
+// ************** Api Token Routes (End) ****************************//
 
 // ************** Private Routes (Start) ****************************//
 
-    
-Route::middleware('auth:sanctum')->get('/students', [StudentController::class, 'index']);
+    // ************** Routes Middleware (Start) ****************************//
+        // Route::middleware('auth:sanctum')->get('/students', [StudentController::class, 'index']);
+        // Route::middleware('auth:sanctum')->get('/students/{id}', [StudentController::class, 'show']);
+    // ************** Routes Middleware (End) ****************************//
+
+    // ************** Group Middleware (Start) ****************************//
+        // Route::middleware(['auth:sanctum'])->group(function(){
+        //     Route::get('/students', [StudentController::class, 'index']);
+        //     Route::get('/students/{id}', [StudentController::class, 'show']);
+        //     Route::post('/students', [StudentController::class, 'store']);
+        //     Route::put('/students/{id}', [StudentController::class, 'update']);
+        //     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+        //     Route::get('/students/search/{city}', [StudentController::class, 'search']);
+        //     Route::post('/logout', [UserController::class, 'logout']);
+        // });
+    // ************** Group Middleware (End) ****************************//
 
 // ************** Private Routes (End) *****************************//
+
+// ************** Partially Protect Routes (Start) ****************************//
+    //Public
+        Route::get('/students', [StudentController::class, 'index']);
+        Route::get('/students/{id}', [StudentController::class, 'show']);
+        Route::get('/students/search/{city}', [StudentController::class, 'search']);
+    //Private
+        Route::middleware(['auth:sanctum'])->group(function(){
+            Route::post('/students', [StudentController::class, 'store']);
+            Route::put('/students/{id}', [StudentController::class, 'update']);
+            Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+            Route::post('/logout', [UserController::class, 'logout']);
+        });
+
+// ************** Partially Protect Routes (End) ****************************//
 
 
 
